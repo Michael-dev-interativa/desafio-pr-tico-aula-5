@@ -1,0 +1,45 @@
+root@controlplane:~$ kubectl version --client
+Client Version: v1.37.1
+Kustomize Version: v5.8.1
+root@controlplane:~$ kubectl get nodes
+NAME           STATUS   ROLES           AGE   VERSION
+controlplane   Ready    control-plane   9d    v1.37.1
+node01         Ready    <none>          9d    v1.37.1
+root@controlplane:~$ kubectl scale deployment web-aula5 --replicas=5
+deployment.apps/web-aula5 scaled
+root@controlplane:~$ kubectl get pods -o wide
+NAME                         READY   STATUS    RESTARTS   AGE     IP              NODE     NOMINATED NODE   READINESS GATES
+web-aula5-779c6f9566-4l2gs   1/1     Running   0          7s      192.168.1.84    node01   <none>           <none>
+web-aula5-779c6f9566-9zdrv   1/1     Running   0          7s      192.168.1.61    node01   <none>           <none>
+web-aula5-779c6f9566-hljtt   1/1     Running   0          6m35s   192.168.1.96    node01   <none>           <none>
+web-aula5-779c6f9566-vlx6f   1/1     Running   0          4m4s    192.168.1.235   node01   <none>           <none>
+web-aula5-779c6f9566-xfcpm   1/1     Running   0          5m4s    192.168.1.88    node01   <none>           <none>
+root@controlplane:~$ kubectl get deployment,replicaset,pods
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/web-aula5   5/5     5            5           7m5s
+
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/web-aula5-779c6f9566   5         5         5       7m5s
+
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/web-aula5-779c6f9566-4l2gs   1/1     Running   0          37s
+pod/web-aula5-779c6f9566-9zdrv   1/1     Running   0          37s
+pod/web-aula5-779c6f9566-hljtt   1/1     Running   0          7m5s
+pod/web-aula5-779c6f9566-vlx6f   1/1     Running   0          4m34s
+pod/web-aula5-779c6f9566-xfcpm   1/1     Running   0          5m34s
+root@controlplane:~$ kubectl get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+web-aula5-779c6f9566-4l2gs   1/1     Running   0          56s
+web-aula5-779c6f9566-9zdrv   1/1     Running   0          56s
+web-aula5-779c6f9566-hljtt   1/1     Running   0          7m24s
+web-aula5-779c6f9566-vlx6f   1/1     Running   0          4m53s
+web-aula5-779c6f9566-xfcpm   1/1     Running   0          5m53s
+root@controlplane:~$ kubectl delete pod $(kubectl get pods -o jsonpath='{.items[0].metadata.name}')
+pod "web-aula5-779c6f9566-4l2gs" deleted from default namespace
+root@controlplane:~$ kubectl get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+web-aula5-779c6f9566-9zdrv   1/1     Running   0          79s
+web-aula5-779c6f9566-hljtt   1/1     Running   0          7m47s
+web-aula5-779c6f9566-tkhwz   1/1     Running   0          14s
+web-aula5-779c6f9566-vlx6f   1/1     Running   0          5m16s
+web-aula5-779c6f9566-xfcpm   1/1     Running   0          6m16s
